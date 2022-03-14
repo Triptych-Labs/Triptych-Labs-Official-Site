@@ -38,12 +38,13 @@ function Header() {
             position: 'absolute',
             left: 0,
             top: 0,
-            width: '90px',
-            height: '90px',
+            width: '80px',
+            height: '80px',
             background:
               "url('http://stfalcon.github.io/stopwar/img/stop-war-in-ukraine.png')",
             zIndex: 2013,
             border: 0,
+        
           }}
           title="Do something to stop this war! Russians are killing our children and civilians!"
           target="_blank"

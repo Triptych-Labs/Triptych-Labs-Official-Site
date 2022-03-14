@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState, useCallback } from 'react';
 import * as anchor from '@project-serum/anchor';
 
 import styled from 'styled-components';
-import { Container, Snackbar } from '@mui/material/';
+import { Container, Snackbar, Typography } from '@mui/material/';
 import Paper from '@mui/material/Paper';
 import Alert from '@mui/material/Alert';
 import { PublicKey } from '@solana/web3.js';
@@ -160,12 +160,12 @@ const Home = (props: HomeProps) => {
   ]);
 
   return (
-    <Container style={{ marginTop: 50 }}>
+    <Container>
       <Container maxWidth="xs" style={{ position: 'relative' }}>
         <Paper
           style={{
             padding: 24,
-            backgroundColor: 'black',
+            backgroundColor: 'rgba(0,0,0,0.8)',
             color: 'white',
             borderRadius: 6,
           }}
@@ -205,6 +205,9 @@ const Home = (props: HomeProps) => {
                     onMint={onMint}
                   />
                 )}
+                <Typography variant="body1" style={{ margin: '12px' }}>
+                  The Artifacts
+                </Typography>
               </MintContainer>
             </>
           )}

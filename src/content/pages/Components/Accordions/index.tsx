@@ -1,29 +1,23 @@
-import { Helmet } from 'react-helmet-async';
-
-import PageTitle from 'src/components/PageTitle';
-import PageTitleWrapper from 'src/components/PageTitleWrapper';
-import { Container, Grid, Card, CardHeader, CardContent, Divider } from '@mui/material';
+import {
+  Container,
+  Grid,
+  Card,
+  CardHeader,
+  CardContent,
+  Divider,
+  useTheme,
+} from '@mui/material';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Footer from 'src/components/Footer';
 
 function Accordions() {
-
+  const theme = useTheme();
   return (
     <>
-      <Helmet>
-        <title>Accordions - Components</title>
-      </Helmet>
-      <PageTitleWrapper>
-        <PageTitle
-          heading="Accordions"
-          subHeading="Accordions contain creation flows and allow lightweight editing of an element."
-          docs="https://material-ui.com/components/accordion/" />
-      </PageTitleWrapper>
-      <Container maxWidth="lg">
+      <Container maxWidth="xl">
         <Grid
           container
           direction="row"
@@ -32,55 +26,88 @@ function Accordions() {
           spacing={3}
         >
           <Grid item xs={12}>
-            <Card>
-              <CardHeader title="Basic Example" />
-              <Divider />
+            <Card style={{ background: 'rgba(112, 99, 192, 0.45)' }}>
+              <Typography variant="body1" style={{ margin: '15px' }}>
+                Artifact Ownership
+              </Typography>
               <CardContent>
-                <Accordion>
+                <Accordion style={{ background: 'rgba(112, 99, 192, 0.25)' }}>
                   <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls="panel1a-content"
                     id="panel1a-header"
                   >
-                    <Typography>Accordion 1</Typography>
+                    <Typography>Artifact DAO membership</Typography>
                   </AccordionSummary>
                   <AccordionDetails>
                     <Typography>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-                      malesuada lacus ex, sit amet blandit leo lobortis eget.
+                      Through owning these Artifacts you are granted access to
+                      one of the most sophisticated on-chain DAOs on Solana.
+                      There will only ever be 117 spots, the number of Artifacts
+                      in existence..
                     </Typography>
                   </AccordionDetails>
                 </Accordion>
-                <Accordion>
+                <Accordion style={{ background: 'rgba(112, 99, 192, 0.25)' }}>
                   <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls="panel2a-content"
                     id="panel2a-header"
                   >
-                    <Typography>Accordion 2</Typography>
+                    <Typography>Whitelisted</Typography>
                   </AccordionSummary>
                   <AccordionDetails>
                     <Typography>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-                      malesuada lacus ex, sit amet blandit leo lobortis eget.
+                      You will be forever whitelisted on all of our NFT drops
+                      and giveaways. Artifacts work with our custom Candy
+                      Machine as whitelist tokens for our mints.
                     </Typography>
                   </AccordionDetails>
                 </Accordion>
-                <Accordion disabled>
+                <Accordion style={{ background: 'rgba(112, 99, 192, 0.25)' }}>
                   <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls="panel3a-content"
                     id="panel3a-header"
                   >
-                    <Typography>Disabled Accordion</Typography>
+                    <Typography>Early Access</Typography>
                   </AccordionSummary>
+                  <AccordionDetails>
+                    <Typography>
+                      Gain early access to all Solana Programs/Tools as we
+                      develop them! We are not stingy!
+                    </Typography>
+                  </AccordionDetails>
                 </Accordion>
               </CardContent>
             </Card>
+            <Accordion
+              style={{
+                background: 'rgba(112, 99, 192, 0.25)',
+                marginTop: '15px',
+              }}
+            >
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel3a-content"
+                id="panel3a-header"
+              >
+                <Typography>About us</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Typography>
+                  Triptych Labs is a core team of 3 with many collaborators. Our
+                  mission is to bring effective, secure tools to the space
+                  through publishing our works for all to access. When we arent
+                  busy writing contracts we are busy writing contracts. - Dom,
+                  Evan, Peyton <br />
+                  <br /> Need help with your project? <br /> Join our discord!
+                </Typography>
+              </AccordionDetails>
+            </Accordion>
           </Grid>
         </Grid>
       </Container>
-      <Footer />
     </>
   );
 }

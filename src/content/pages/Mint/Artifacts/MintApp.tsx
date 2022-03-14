@@ -18,23 +18,20 @@ import {
 } from '@solana/wallet-adapter-wallets';
 import { clusterApiUrl } from '@solana/web3.js';
 import { useSnackbar } from 'notistack';
-import React, { FC, ReactNode, useCallback, useMemo } from 'react';
-import { MintButton } from './mint/MintButton';
+import React, { FC, ReactNode, useCallback, useMemo, useState } from 'react';
 import { Theme } from './Theme';
-import logo from './labs.png';
-import lambda from './lambda.gif';
 import { Features } from './Features';
 import Home from './mint/Home';
 import * as anc from '@project-serum/anchor';
-import { Paper, CardContent, Box, Card, Divider, Button } from '@mui/material';
-
+import { useTheme } from '@mui/material';
+import Menu from '@mui/icons-material/Menu';
+import SidebarLayout from 'src/layouts/SidebarLayout';
 export const MintApp: FC = () => {
+  const theme = useTheme();
   return (
     <Theme>
       <Context>
-        <div className={'App-header'} style={{background:"url(/static/1.png)"}}>
-          <img src={'/static/images/labs.png'} style={{ marginTop: '8%' }} />
-          <br />
+        <div className={'App-header'} style={{}}>
           <Content />
         </div>
       </Context>
@@ -108,28 +105,67 @@ const Content: FC = () => {
 
   const startDateSeed = parseInt('10');
   const txTimeoutInMilliseconds = 30000;
-
+  const [menuOpen, setMenuOpen] = useState(false);
   const endpoint = useMemo(() => clusterApiUrl(network), []);
   return (
     <>
-      <div className={'mint-spot'}>
-        <WalletMultiButton />
-        <div style={{ margin: '20px' }}>
-          <Home
-            candyMachineId={candyMachineId}
-            connection={connection}
-            startDate={startDateSeed}
-            txTimeout={txTimeoutInMilliseconds}
-            rpcHost={rpcHost}
-          />
+      {menuOpen && <SidebarLayout />}
+      <div
+        style={{
+          width: '100vw',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          marginTop: '100px',
+        }}
+      >
+        <Menu
+          style={{
+            position: 'absolute',
+            float: 'right',
+            left: '10vw',
+            margin: '0px',
+            fontSize: '50',
+          }}
+          onClick={() => {
+            if (menuOpen === false) {
+              setMenuOpen(true);
+            }
+            if (menuOpen === true) {
+              setMenuOpen(false);
+            }
+          }}
+        />
+        <img
+          src={'/static/images/labs.png'}
+          style={{ width: '40vw', maxWidth: '400px', margin: 'auto' }}
+        />
+        <div
+          className={'mint-spot'}
+          style={{
+            maxWidth: '700px',
+            margin: '30px',
+            background: "url('/static/images/39.jpg')",
+            backgroundSize: '170%',
+          }}
+        >
+          <WalletMultiButton />
+          <div style={{ margin: '15px' }}>
+            <Home
+              candyMachineId={candyMachineId}
+              connection={connection}
+              startDate={startDateSeed}
+              txTimeout={txTimeoutInMilliseconds}
+              rpcHost={rpcHost}
+            />
+          </div>
         </div>
-      </div>
-      <div style={{ marginTop: '8%' }} />
-      <div className={'feature-spot'}>
-        {
-          //@ts-ignore
-          <Features className={'features'} />
-        }
+        <div className={'feature-spot'}>
+          {
+            //@ts-ignore
+            <Features className={'features'} />
+          }
+        </div>
       </div>
     </>
   );

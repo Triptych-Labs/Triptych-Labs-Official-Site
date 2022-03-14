@@ -2,10 +2,13 @@ import {
   createTheme,
   StyledEngineProvider,
   ThemeProvider,
+  useTheme
 } from '@mui/material';
 import { deepPurple, amber } from '@mui/material/colors';
 import { SnackbarProvider } from 'notistack';
 import React, { FC, ReactNode } from 'react';
+
+/*
 //@ts-ignore
 const theme = createTheme({
   typography: {
@@ -57,8 +60,9 @@ const theme = createTheme({
   },
 }
 );
-
+*/
 export const Theme: FC<{ children: ReactNode }> = ({ children }) => {
+  const theme = useTheme()
   return (
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>

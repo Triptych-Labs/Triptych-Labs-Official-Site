@@ -25,15 +25,30 @@ import {
   CardHeader,
   CardContent,
   Divider,
+  useTheme,
+  Typography
 } from '@mui/material';
-import { OrbitControls, Scroll } from '@react-three/drei';
+import { OrbitControls, Scroll, CameraShake, Billboard, Sphere } from '@react-three/drei';
 import { Parallax, ParallaxLayer } from '@react-spring/parallax';
 import { Sun } from './planet';
+
 
 const LandingContainer = styled(Container)(
   () => `
     max-width: 100%;
     align-items: center;
+`,
+);
+const GridItemStyled = styled(Grid)(
+  () => `
+    position: absolute;
+    align-items: center;
+    top:35vh;
+    left:80vw;
+    @media only screen and (max-width: 900px) {
+    top:10vh; 
+    left:15vw;
+    }
 `,
 );
 const OverviewWrapper = styled(Box)(
@@ -45,6 +60,22 @@ const OverviewWrapper = styled(Box)(
 `,
 );
 function Dialog({ dialogue, setSidebar, bottomRef }) {
+const theme = useTheme()
+const MenuCard = styled(Card)(
+  () => `
+    max-width: 200px;
+    display:flex;
+    flex-direction:column;
+    align-items:center !important;
+    justify-content:center !important;
+    border: solid;
+    border-color:${theme.colors.secondary.lighter};
+    text-align:center;
+    @media only screen and (max-width: 900px) {
+    width:100%;    
+    }
+`,
+);
   const onClick = useCallback(() => {
     setSidebar(1);
     bottomRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -63,39 +94,28 @@ function Dialog({ dialogue, setSidebar, bottomRef }) {
       break;
   }
   return (
-    <Grid
+    <GridItemStyled
       item
       xs={12}
       style={{
-        paddingLeft: '350px',
-        paddingTop: '350px',
         width: '100%',
-        margin: 'left',
-        justifyContent: 'right',
         zIndex: 1,
-        position: 'absolute',
       }}
     >
-      <div
-        style={{
-          width: '30%',
-          right: '60px',
-          margin: 'auto',
-          textAlign: 'center',
-          padding: '10px',
-          paddingLeft: '16%',
-          marginRight: '18%',
-        }}
-      >
-        <Card>
-          <CardHeader title="Welcome to The Triptych Laborare" />
-          <p>{message}</p>
+        <MenuCard>
+        <CardContent>
+        <Typography variant="h3">
+
+        Triptych Laborare
+        </Typography>
+        </CardContent>
+          <p style={{fontSize:"1em"}}>{message}</p>
           <Divider />
           <CardContent>
             <Button
               sx={{ margin: 1 }}
               variant="contained"
-              color="primary"
+              color="secondary"
               onClick={onClick}
             >
               Explore
@@ -103,15 +123,14 @@ function Dialog({ dialogue, setSidebar, bottomRef }) {
             <Button
               sx={{ margin: 1 }}
               variant="contained"
-              color="primary"
+              color="secondary"
               href="/mint/artifacts"
             >
               Mint Artifact
             </Button>
           </CardContent>
-        </Card>
-      </div>
-    </Grid>
+        </MenuCard>
+    </GridItemStyled>
   );
 }
 
@@ -265,8 +284,8 @@ function Swarm({ count, ...props }) {
   });
 
   return (
-    <instancedMesh ref={mesh} scale={20} args={[null, null, count]} {...props}>
-      <boxBufferGeometry args={[0.025, 0.025, 0.025]} />
+    <instancedMesh ref={mesh} scale={30} args={[null, null, count]} {...props}>
+      <boxBufferGeometry args={[0.045, 0.045, 0.045]} />
       <meshStandardMaterial color="orange" />
     </instancedMesh>
   );
@@ -276,6 +295,7 @@ function Overview() {
   const [landingJupiter, setLandingJupiter] = useState(0);
   const [explorationJupiter, setExplorationJupiter] = useState(0);
   const [dialogue, setDialogue] = useState(0);
+  const [start, setStart] = useState(false);
   const [zoom, setZoom] = useState(false);
   const [focus, setFocus] = useState({});
   const bottomRef = useRef(null);
@@ -301,7 +321,7 @@ function Overview() {
         target="_blank"
       />
       <div style={{ opacity: sidebar }}>
-        <SidebarLayout />
+        {sidebar === 1 && <SidebarLayout />}
       </div>
       {sidebar === 0 && (
         <Dialog
@@ -327,6 +347,17 @@ function Overview() {
                   camera={{ position: [0, 100, 300], fov: 90 }}
                 >
                   <OrbitControls/>
+                  {//@ts-ignore
+                  <Billboard
+  follow={true}
+  lockX={false}
+  lockY={false}
+>
+{//@ts-ignore
+<Sphere/>
+}
+</Billboard>
+}
                   <Logo />
                   <Satellite size={0.5} />
                   <Sun
@@ -340,7 +371,8 @@ function Overview() {
                     sidebar={sidebar}
                     setSidebar={setSidebar}
                   />
-                  <Swarm count={500} />
+                  <Swarm count={1100} />
+                  <CameraShake/>
                 </Canvas>
               </ParallaxLayer>
               <ParallaxLayer offset={1} speed={0}>
@@ -366,6 +398,7 @@ function Overview() {
                       height={400}
                     />
                   </EffectComposer>
+                  <CameraShake/>
                 </Canvas>
               </ParallaxLayer>
               <ParallaxLayer offset={1} speed={0}>
