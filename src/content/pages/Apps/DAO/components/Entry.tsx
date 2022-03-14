@@ -6,7 +6,7 @@ import {
   FormControl,
   TextField,
 } from '@mui/material';
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
 import {
   Keypair,
@@ -18,6 +18,7 @@ import {
 import * as anc from '@project-serum/anchor';
 import { useRecoilState } from 'recoil';
 import { login } from 'src/content/pages/Apps/DAO/atoms/login';
+import { nfts } from 'src/content/pages/Apps/DAO/atoms/nfts';
 import { session } from 'src/content/pages/Apps/DAO/atoms/session';
 
 type Props = {};
@@ -27,6 +28,24 @@ declare function certify(
   programKey: string,
   accessCode: string,
 ): Promise<boolean>;
+
+declare function fetchNfts(pubKey: string): Promise<Uint8Array>;
+
+async function callFetchNfts(
+  pubKey: string,
+  setNfts: any,
+  setErrorMessage: any,
+) {
+  try {
+    const nfts = JSON.parse(
+      Buffer.from((await fetchNfts(pubKey)).buffer).toString(),
+    );
+    console.log(nfts);
+    setNfts(nfts);
+  } catch (e) {
+    setErrorMessage('Unauthorized');
+  }
+}
 
 async function callCertify(
   pubKey: string,
@@ -55,6 +74,7 @@ const DAOEntry: React.FC<Props> = (props) => {
   const { publicKey } = useWallet();
 
   const [, setEntry] = useRecoilState(login);
+  const [, setNfts] = useRecoilState(nfts);
   const [, setSession] = useRecoilState(session);
   const [programKey, setProgramKey] = useState('');
   const [accessCode, setAccessCode] = useState('');
@@ -64,6 +84,11 @@ const DAOEntry: React.FC<Props> = (props) => {
     setEntry(false);
     setErrorMessage(null);
   };
+
+  useEffect(() => {
+    if (publicKey)
+      callFetchNfts(publicKey.toString(), setNfts, setErrorMessage);
+  }, [publicKey]);
 
   const on2FAChange = useCallback(
     (event: React.ChangeEvent<HTMLTextAreaElement>) => {
