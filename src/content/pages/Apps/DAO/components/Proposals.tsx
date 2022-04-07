@@ -1,3 +1,4 @@
+import { useWallet } from '@solana/wallet-adapter-react';
 import {
   Button,
   Card,
@@ -28,11 +29,23 @@ import type ProposalsT from 'src/content/pages/Apps/DAO/structs/proposals';
 import { styled } from '@mui/material/styles';
 import { useRecoilState } from 'recoil';
 import { session } from 'src/content/pages/Apps/DAO/atoms/session';
-import { proposals } from 'src/content/pages/Apps/DAO/atoms/proposals';
+import {
+  proposals,
+  selectedProposal,
+} from 'src/content/pages/Apps/DAO/atoms/proposals';
 
 type Props = {};
 
 declare function fetchProposals(programKey: string): Promise<string>;
+declare function castVotes(
+  programKey: string,
+  payload: string,
+): Promise<boolean>;
+declare function registerBallot(
+  publicKey: string,
+  proposal: string,
+  programKey: string,
+): Promise<boolean>;
 
 async function callFetchProposals(
   programKey: string,
@@ -50,6 +63,49 @@ async function callFetchProposals(
 
   console.log('Made it');
 }
+async function callRegisterBallot(
+  publicKey: string,
+  ballot: string,
+  programKey: string,
+  setErrorMessage: any,
+) {
+  console.log(publicKey, ballot);
+  try {
+    const resp = await registerBallot(publicKey, ballot, programKey);
+    console.log(resp);
+  } catch (e) {
+    console.log(e);
+    console.log(programKey);
+    setErrorMessage('Unauthorized');
+  }
+
+  console.log('Made it');
+}
+async function callCastVote(
+  publicKey: string,
+  votes: number[],
+  ballot: string,
+  programKey: string,
+  setErrorMessage: any,
+) {
+  console.log(publicKey, ballot);
+  try {
+    const payload = JSON.stringify({
+      argZero: publicKey,
+      argOne: votes,
+      argTwo: ballot,
+    });
+    console.log(payload);
+    castVotes(programKey, payload);
+    console.log('.....');
+  } catch (e) {
+    console.log(e);
+    console.log(programKey);
+    setErrorMessage('Unauthorized');
+  }
+
+  console.log('Made it');
+}
 
 const VoteButton = styled(Button)(
   ({ theme }) => `
@@ -59,10 +115,34 @@ const VoteButton = styled(Button)(
 );
 
 const ProposalCard = ({ proposal }) => {
+  const { publicKey } = useWallet();
+  const [sessionKey] = useRecoilState(session);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [yayVote, setYayVote] = useState<number>(0);
-  const [nayVote, setNayVote] = useState<number>(0);
+  const [yayVote, setYayVote] = useState<number | null>(null);
+  const [nayVote, setNayVote] = useState<number | null>(null);
 
+  useEffect(() => {
+    // on proposal change, check for proposal membership
+    if (publicKey)
+      callRegisterBallot(
+        publicKey.toString(),
+        proposal.proposalAddress,
+        sessionKey,
+        setErrorMessage,
+      );
+  }, [proposal]);
+
+  const castVote = (event) => {
+    event.preventDefault();
+    if (publicKey)
+      callCastVote(
+        publicKey.toString(),
+        [Number(yayVote), Number(nayVote)],
+        proposal.proposalAddress,
+        sessionKey,
+        setErrorMessage,
+      );
+  };
   const changeYayVote = (event) => {
     setYayVote(event.target.value);
   };
@@ -97,7 +177,7 @@ const ProposalCard = ({ proposal }) => {
           </Typography>
           <Divider sx={{ my: 4 }}>Votes - 10 Remaining</Divider>
           <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-            <form onSubmit={() => {}}>
+            <form onSubmit={castVote}>
               <Grid
                 container
                 spacing={0}
@@ -108,7 +188,9 @@ const ProposalCard = ({ proposal }) => {
                 <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                   <FormControl>
                     <Grid item>
-                      <InputLabel htmlFor="component-outlined">Yay</InputLabel>
+                      <InputLabel htmlFor="component-outlined">
+                        {proposal.proposalVotes[0]} Yay
+                      </InputLabel>
                       <OutlinedInput
                         sx={{ borderColor: 'green' }}
                         id="component-outlined"
@@ -117,23 +199,22 @@ const ProposalCard = ({ proposal }) => {
                         endAdornment={
                           <InputAdornment position="end">Votes</InputAdornment>
                         }
-                        value={yayVote}
                       />
                     </Grid>
                   </FormControl>
                   <br />
                   <FormControl>
                     <Grid item>
-                      <InputLabel htmlFor="component-outlined">Nay</InputLabel>
+                      <InputLabel htmlFor="component-outlined">
+                        {proposal.proposalVotes[1]} Nay
+                      </InputLabel>
                       <OutlinedInput
                         sx={{ borderColor: 'red' }}
                         id="component-outlined"
-                        label="Nay"
                         onChange={changeNayVote}
                         endAdornment={
                           <InputAdornment position="end">Votes</InputAdornment>
                         }
-                        value={nayVote}
                       />
                     </Grid>
                   </FormControl>
@@ -146,7 +227,7 @@ const ProposalCard = ({ proposal }) => {
                     justifyContent="center"
                     direction="column"
                   >
-                    <VoteButton size="small" variant="contained">
+                    <VoteButton type="submit" size="small" variant="contained">
                       Vote
                     </VoteButton>
                   </Grid>
@@ -179,6 +260,7 @@ const ProposalCard = ({ proposal }) => {
 const DAOProposals: React.FC<Props> = (props) => {
   const [sessionKey] = useRecoilState(session);
   const [proposalsState, setProposals] = useRecoilState(proposals);
+  const [selectedProposalsState] = useRecoilState(selectedProposal);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
@@ -194,7 +276,7 @@ const DAOProposals: React.FC<Props> = (props) => {
         <div style={{ display: 'flex' }}>
           <div>
             {proposalsState.length > 0 && (
-              <ProposalCard proposal={proposalsState[0]} />
+              <ProposalCard proposal={proposalsState[selectedProposalsState]} />
             )}
           </div>
         </div>

@@ -97,8 +97,7 @@ const Content: FC = () => {
   };
   const candyMachineId = getCandyMachineId();
   const network = 'mainnet-beta';
-  const rpcHost =
-    'https://falling-empty-tree.solana-mainnet.quiknode.pro/934c447edf1a84cdee3f3e392d5e5f33f2b9bb48/';
+  const rpcHost = 'https://api.mainnet-beta.solana.com/';
   const connection = new anc.web3.Connection(
     rpcHost ? rpcHost : anc.web3.clusterApiUrl('mainnet-beta'),
   );

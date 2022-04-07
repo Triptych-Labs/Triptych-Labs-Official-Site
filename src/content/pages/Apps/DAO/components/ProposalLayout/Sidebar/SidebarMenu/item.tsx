@@ -1,4 +1,10 @@
 import { FC, ReactNode, useState, useContext } from 'react';
+import { useRecoilState } from 'recoil';
+import { session } from 'src/content/pages/Apps/DAO/atoms/session';
+import {
+  proposals,
+  selectedProposal,
+} from 'src/content/pages/Apps/DAO/atoms/proposals';
 import { NavLink as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
 import { SidebarContext } from 'src/contexts/SidebarContext';
@@ -32,8 +38,17 @@ const SidebarMenuItem: FC<SidebarMenuItemProps> = ({
   ...rest
 }) => {
   const [menuToggle, setMenuToggle] = useState<boolean>(openParent);
+  const [, setSelectedProposalsState] = useRecoilState(selectedProposal);
+  const [proposalsState, setProposals] = useRecoilState(proposals);
 
-  const toggleSidebar = () => {};
+  const toggleSidebar = () => {
+    let index = proposalsState.findIndex(
+      (proposal) => proposal.proposalAddress === ballot,
+    );
+    console.log(proposalsState);
+    console.log(ballot, index);
+    setSelectedProposalsState(index);
+  };
 
   const toggleMenu = (): void => {
     setMenuToggle((Open) => !Open);

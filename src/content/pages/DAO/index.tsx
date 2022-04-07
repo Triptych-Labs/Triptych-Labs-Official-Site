@@ -78,16 +78,10 @@ const rpcHost =
   'https://sparkling-dark-shadow.solana-devnet.quiknode.pro/0e9964e4d70fe7f856e7d03bc7e41dc6a2b84452/';
 const connection = new Connection(rpcHost);
 
-const Wallet = ({}) => {
-  // The network can be set to 'devnet', 'testnet', or 'mainnet-beta'.
+function Mission() {
+  const [entry, setEntry] = useRecoilState(login);
   const network = WalletAdapterNetwork.Devnet;
-
-  // You can also provide a custom RPC endpoint.
   const endpoint = useMemo(() => clusterApiUrl(network), [network]);
-
-  // @solana/wallet-adapter-wallets includes all the adapters but supports tree shaking and lazy loading --
-  // Only the wallets you configure here will be compiled into your application, and only the dependencies
-  // of wallets that your users connect to will be loaded.
   const wallets = useMemo(
     () => [
       new PhantomWalletAdapter(),
@@ -102,48 +96,40 @@ const Wallet = ({}) => {
   );
 
   return (
-    <ConnectionProvider endpoint={endpoint}>
-      <WalletProvider wallets={wallets} autoConnect>
-        <WalletDialogProvider>
-          <WalletMultiButton />
-          <Entry />
-        </WalletDialogProvider>
-      </WalletProvider>
-    </ConnectionProvider>
-  );
-};
-
-function Mission() {
-  const [entry, setEntry] = useRecoilState(login);
-
-  return (
     <>
-      {!entry && (
-        <>
-          <div>
-            <TopbarLayout />
-          </div>
-          <Helmet>
-            <title>Status - 404</title>
-          </Helmet>
-          <MainContent>
-            <Container maxWidth="md">
-              <Container maxWidth="sm">
-                <Card sx={{ textAlign: 'center', mt: 3, p: 4 }}>
-                  <Box textAlign="center">
-                    <Wallet />
-                  </Box>
-                  <Divider sx={{ my: 4 }}>OR</Divider>
-                  <Button href="/overview" variant="outlined">
-                    Go to homepage
-                  </Button>
-                </Card>
-              </Container>
-            </Container>
-          </MainContent>
-        </>
-      )}
-      {entry && <Tasks />}
+      <ConnectionProvider endpoint={endpoint}>
+        <WalletProvider wallets={wallets} autoConnect>
+          <WalletDialogProvider>
+            {!entry && (
+              <>
+                <div>
+                  <TopbarLayout />
+                </div>
+                <Helmet>
+                  <title>Status - 404</title>
+                </Helmet>
+                <MainContent>
+                  <Container maxWidth="md">
+                    <Container maxWidth="sm">
+                      <Card sx={{ textAlign: 'center', mt: 3, p: 4 }}>
+                        <Box textAlign="center">
+                          <WalletMultiButton />
+                          <Entry />
+                        </Box>
+                        <Divider sx={{ my: 4 }}>OR</Divider>
+                        <Button href="/overview" variant="outlined">
+                          Go to homepage
+                        </Button>
+                      </Card>
+                    </Container>
+                  </Container>
+                </MainContent>
+              </>
+            )}
+            {entry && <Tasks />}
+          </WalletDialogProvider>
+        </WalletProvider>
+      </ConnectionProvider>
     </>
   );
 }

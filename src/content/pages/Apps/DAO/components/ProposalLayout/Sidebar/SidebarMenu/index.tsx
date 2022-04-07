@@ -216,8 +216,8 @@ function SidebarMenu() {
           let mItem: MenuItems = {
             items: [
               {
-                name: prop.proposalDescription,
-                ballot: prop.proposalDescription,
+                name: 'Vote Here',
+                ballot: prop.proposalAddress,
               },
             ],
             heading: prop.proposalDescription,
