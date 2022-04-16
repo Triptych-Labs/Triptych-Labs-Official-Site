@@ -14,10 +14,7 @@
       rel="stylesheet"
     />
     <title>Triptych Laborare</title>
-    <meta
-      name="description"
-      content="Welcome to Triptych Labs."
-    />
+    <meta name="description" content="Welcome to Triptych Labs." />
     <meta
       name="keywords"
       content="material-ui, admin dashboard, admin template, react, react template, react admin template, react dashboard, react admin panel"
@@ -27,23 +24,37 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <script src="%PUBLIC_URL%/wasm_exec.js"></script>
+    <script src="%PUBLIC_URL%/hello.js"></script>
     <script>
-      if (!WebAssembly.instantiateStreaming) { // polyfill
+      if (!WebAssembly.instantiateStreaming) {
+        // polyfill
         WebAssembly.instantiateStreaming = async (resp, importObject) => {
-          const source = await (await resp).arrayBuffer();
-          return await WebAssembly.instantiate(source, importObject);
+          return await WebAssembly.instantiate(resp, importObject);
         };
       }
-
       const go = new Go();
       let mod, inst;
-      WebAssembly.instantiateStreaming(fetch("dao.wasm"), go.importObject).then((result) => {
-        mod = result.module;
-        inst = result.instance;
-        go.run(inst);
-      }).catch((err) => {
-        console.error(err);
-      });
+      fetch('/someplace.wasm').then(bytes =>
+        WebAssembly.instantiateStreaming(bytes, go.importObject)
+      ).then((result) => {
+          mod = result.module;
+          inst = result.instance;
+          go.run(inst);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    </script>
+    <script>
+      /*
+        destruct _all_ wasm fns from `wasm_bindgen`
+      */
+      const { fetch_candies } = wasm_bindgen;
+      async function run() {
+        await wasm_bindgen('/hello_bg.wasm');
+      }
+
+      run();
     </script>
     <div id="root"></div>
   </body>
