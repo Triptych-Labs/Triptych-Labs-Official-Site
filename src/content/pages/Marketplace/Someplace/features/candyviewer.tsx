@@ -59,7 +59,7 @@ import { Snackbar } from '@mui/material/';
 import Alert from '@mui/material/Alert';
 // import { Box,  } from '@mui/material';
 
-const ORACLE = new PublicKey('5DPDwYfAGmnW9jwk5tQswktG6Ecb4ZhHNFHLGveKHHns');
+const ORACLE = new PublicKey('FGKyZmWfZ3ohudHNecTEhVeQsL1uuuuj5paKPtD6MkjR');
 declare function fetch_candies(T: String): Promise<any>;
 declare function reportCatalog(T: String): Promise<any>;
 declare function sellables(Tholder: String, Toracle: String): Promise<any>;
@@ -181,7 +181,9 @@ export const Candy = ({
     async function fetchMetadata() {
       if (!candyCaches[String(id + candyId)]) {
         setCandyMeta({});
-        const data = await axios.get(candyData[Number(candyId)].uri);
+        const data = await axios.get(
+          candyData[Number(candyId)].uri.replace('dweb', 'nftstorage'),
+        );
         setCandyCaches((cache: any) => {
           let _cache = { ...cache };
           _cache[String(id + candyId)] = data.data;
@@ -278,8 +280,10 @@ export const Candy = ({
             <AsyncImage
               style={{ height: '200px' }}
               src={
-                // @ts-ignore
-                candyMeta.hasOwnProperty('image') ? candyMeta.image : ''
+                candyMeta.hasOwnProperty('image')
+                  ? // @ts-ignore
+                    candyMeta.image.replace('dweb', 'nftstorage')
+                  : ''
               }
             />
             <div>
@@ -748,7 +752,7 @@ export const BuyCandiesContainer = () => {
       }
       buyCommit();
     },
-    [wallet, connection],
+    [wallet, connection, candyId],
   );
 
   return (
@@ -809,13 +813,12 @@ export const SellableCandiesContainer = () => {
           );
 
           const sellTx = Transaction.populate(new Message(sellIx.message));
-          await connection.simulateTransaction(
-            await wallet.signTransaction(sellTx),
-          );
-          const signature = await connection.sendRawTransaction(
-            (await wallet.signTransaction(sellTx)).serialize(),
-          );
+          sellTx.recentBlockhash = (
+            await connection.getRecentBlockhash('finalized')
+          ).blockhash;
+          const signature = await wallet.sendTransaction(sellTx, connection);
           console.log(signature);
+          await connection.confirmTransaction(signature, 'processed');
         }
       }
       sell();

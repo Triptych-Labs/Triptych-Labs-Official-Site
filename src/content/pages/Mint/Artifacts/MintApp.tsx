@@ -23,9 +23,12 @@ import { Theme } from './Theme';
 import { Features } from './Features';
 import Home from './mint/Home';
 import * as anc from '@project-serum/anchor';
-import { useTheme } from '@mui/material';
+import { useTheme, Button } from '@mui/material';
 import Menu from '@mui/icons-material/Menu';
 import SidebarLayout from 'src/layouts/SidebarLayout';
+
+declare function fetch_candies(): Promise<any>;
+
 export const MintApp: FC = () => {
   const theme = useTheme();
   return (
@@ -101,6 +104,12 @@ const Content: FC = () => {
   const connection = new anc.web3.Connection(
     rpcHost ? rpcHost : anc.web3.clusterApiUrl('mainnet-beta'),
   );
+
+  const onClick = async () => {
+    console.log('hello');
+    const data = await fetch_candies();
+    console.log('am high', JSON.parse(data));
+  };
 
   const startDateSeed = parseInt('10');
   const txTimeoutInMilliseconds = 30000;

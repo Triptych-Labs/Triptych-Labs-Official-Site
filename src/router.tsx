@@ -83,6 +83,12 @@ const StatusMaintenance = Loader(
 const Artifacts = Loader(
   lazy(() => import('src/content/pages/Mint/Artifacts')),
 );
+const Someplace = Loader(
+  lazy(() => import('src/content/pages/Marketplace/Someplace')),
+);
+const P2P = Loader(
+  lazy(() => import('src/content/pages/Marketplace/P2P')),
+);
 const Mission = Loader(lazy(() => import('src/content/pages/Mission')));
 const Crew = Loader(lazy(() => import('src/content/pages/Crew')));
 const Dao = Loader(lazy(() => import('src/content/pages/DAO')));
@@ -141,6 +147,24 @@ const routes: PartialRouteObject[] = [
           {
             path: '/artifacts',
             element: <Artifacts />,
+          },
+        ],
+      },
+      {
+        path: 'marketplace',
+        // element: <TopbarLayout />,
+        children: [
+          {
+            path: '/',
+            element: <Navigate to="/" replace />,
+          },
+          {
+            path: '/someplace',
+            element: <Someplace />,
+          },
+          {
+            path: '/p2p',
+            element: <P2P />,
           },
         ],
       },

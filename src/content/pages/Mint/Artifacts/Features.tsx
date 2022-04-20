@@ -15,10 +15,13 @@ import './index.css';
 import Tabs from '../../Components/Tabs';
 import Accordions from '../../Components/Accordions';
 import Carousel from 'react-material-ui-carousel';
-import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
+import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+
+import { CandiesContainer } from './features/candyviewer';
+
 const Artifacts = () => {
   const theme = useTheme();
 
@@ -29,7 +32,7 @@ const Artifacts = () => {
     justify-content:center;
     align-items:center;
     margin:10px;
-    background:rgba(0,0,0,0.5)
+    background: rgba(112, 99, 192, 0.25)
 `,
   );
   return (
@@ -117,6 +120,13 @@ export const Features = () => {
         <Grid item xs={12} xl={12}>
           <Container maxWidth={'lg'}>
             <TripCarousel />
+          </Container>
+          <Container maxWidth={'lg'}>
+            <div>
+              <Box>
+                <CandiesContainer />
+              </Box>
+            </div>
           </Container>
         </Grid>
         <Grid item xs={12}>
