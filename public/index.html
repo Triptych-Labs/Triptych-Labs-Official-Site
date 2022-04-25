@@ -26,24 +26,6 @@
     <script src="%PUBLIC_URL%/wasm_exec.js"></script>
     <script src="%PUBLIC_URL%/hello.js"></script>
     <script>
-      if (!WebAssembly.instantiateStreaming) {
-        // polyfill
-        WebAssembly.instantiateStreaming = async (resp, importObject) => {
-          return await WebAssembly.instantiate(resp, importObject);
-        };
-      }
-      const go = new Go();
-      let mod, inst;
-      fetch('/someplace.wasm').then(bytes =>
-        WebAssembly.instantiateStreaming(bytes, go.importObject)
-      ).then((result) => {
-          mod = result.module;
-          inst = result.instance;
-          go.run(inst);
-        })
-        .catch((err) => {
-          console.error(err);
-        });
     </script>
     <script>
       /*

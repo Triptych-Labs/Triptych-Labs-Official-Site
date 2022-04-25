@@ -176,7 +176,7 @@ const RoadPaper = styled(Paper)(
   justify-content:center;
   align-items:center;
   margin:10px;
-  background: rgba(112, 99, 192, 0.25)
+  background: rgba(71, 71, 71, 0.25)
 `,
 );
 
@@ -428,7 +428,6 @@ export const Candies = ({
   let data = [];
   switch (id) {
     default:
-      setCandyId(String(0));
       data = candyData.map(({ name }, index) => ({
         id: String(index),
         value: name,
@@ -867,6 +866,10 @@ export const BuyCandiesContainer = () => {
           buyTx.recentBlockhash = (
             await connection.getRecentBlockhash('finalized')
           ).blockhash;
+          let resp = await connection.simulateTransaction(
+            await wallet.signTransaction(buyTx),
+          );
+          console.log(resp);
           const signature = await wallet.sendTransaction(buyTx, null);
           console.log(signature);
           await connection.confirmTransaction(signature, 'finalized');
