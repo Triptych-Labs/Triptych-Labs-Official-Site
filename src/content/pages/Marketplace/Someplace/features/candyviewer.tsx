@@ -59,7 +59,7 @@ import { Snackbar } from '@mui/material/';
 import Alert from '@mui/material/Alert';
 // import { Box,  } from '@mui/material';
 
-const ORACLE = new PublicKey('FGKyZmWfZ3ohudHNecTEhVeQsL1uuuuj5paKPtD6MkjR');
+const ORACLE = new PublicKey('sAomFigC3JXKq5ArzwbnRQeaYVk9P7Nkin694RrtfKw');
 declare function fetch_candies(T: String): Promise<any>;
 declare function reportCatalog(T: String): Promise<any>;
 declare function sellables(Tholder: String, Toracle: String): Promise<any>;
@@ -137,7 +137,7 @@ const RoadPaper = styled(Paper)(
   justify-content:center;
   align-items:center;
   margin:10px;
-  background: rgba(112, 99, 192, 0.25)
+  background: rgba(71, 71, 71, 0.25)
 `,
 );
 
@@ -747,6 +747,7 @@ export const BuyCandiesContainer = () => {
           const signature = await wallet.sendTransaction(buyTx, connection, {
             signers: [Keypair.fromSecretKey(base58_to_binary(buyIx.mintKey))],
           });
+          console.log(signature);
           await connection.confirmTransaction(signature, 'processed');
         }
       }

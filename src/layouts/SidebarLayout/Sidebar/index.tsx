@@ -14,7 +14,7 @@ const SidebarWrapper = styled(Box)(
         left: 7%;
         width: ${theme.sidebar.width};
         color: ${theme.sidebar.textColor};
-        background: rgba(17, 22, 51, 0.9);
+        background: ${theme.sidebar.background};
         box-shadow: ${theme.sidebar.boxShadow};
         height: 50%;
         margin: auto;

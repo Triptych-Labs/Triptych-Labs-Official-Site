@@ -13,7 +13,7 @@ import {
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 
 export const CANDY_MACHINE_PROGRAM = new anchor.web3.PublicKey(
-  'AbKmrxbvYKNDoWxr6tjd7qqWU9TAgnqSF6jpnsVwixBi',
+  'cndy3Z4yapfJBmL3ShUp5exZKqR3z33thTzeNMm2gRZ',
 );
 
 const TOKEN_METADATA_PROGRAM_ID = new anchor.web3.PublicKey(

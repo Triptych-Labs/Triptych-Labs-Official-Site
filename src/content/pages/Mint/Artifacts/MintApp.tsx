@@ -43,7 +43,7 @@ export const MintApp: FC = () => {
 };
 const Context: FC<{ children: ReactNode }> = ({ children }) => {
   // The network can be set to 'devnet', 'testnet', or 'mainnet-beta'.
-  const network = WalletAdapterNetwork.Mainnet;
+  const network = WalletAdapterNetwork.Devnet;
 
   // You can also provide a custom RPC endpoint.
   const endpoint = useMemo(() => clusterApiUrl(network), [network]);
@@ -89,7 +89,7 @@ const Content: FC = () => {
   const getCandyMachineId = (): anc.web3.PublicKey | undefined => {
     try {
       const candyMachineId = new anc.web3.PublicKey(
-        'AKQJEFQ6SeTWNMRPhg716rLTWQ33ECGPdhLGwzqsZKN3',
+        'HqXytATekHv4ePK6GDoFnxYQWhKCzfhL2n2pqAmBwTaA',
       );
 
       return candyMachineId;
@@ -99,10 +99,10 @@ const Content: FC = () => {
     }
   };
   const candyMachineId = getCandyMachineId();
-  const network = 'mainnet-beta';
-  const rpcHost = 'https://api.mainnet-beta.solana.com/';
+  const network = 'devnet';
+  const rpcHost = 'https://api.devnet.solana.com/';
   const connection = new anc.web3.Connection(
-    rpcHost ? rpcHost : anc.web3.clusterApiUrl('mainnet-beta'),
+    rpcHost ? rpcHost : anc.web3.clusterApiUrl('devnet'),
   );
 
   const onClick = async () => {

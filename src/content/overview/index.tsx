@@ -26,12 +26,17 @@ import {
   CardContent,
   Divider,
   useTheme,
-  Typography
+  Typography,
 } from '@mui/material';
-import { OrbitControls, Scroll, CameraShake, Billboard, Sphere } from '@react-three/drei';
+import {
+  OrbitControls,
+  Scroll,
+  CameraShake,
+  Billboard,
+  Sphere,
+} from '@react-three/drei';
 import { Parallax, ParallaxLayer } from '@react-spring/parallax';
 import { Sun } from './planet';
-
 
 const LandingContainer = styled(Container)(
   () => `
@@ -60,9 +65,9 @@ const OverviewWrapper = styled(Box)(
 `,
 );
 function Dialog({ dialogue, setSidebar, bottomRef }) {
-const theme = useTheme()
-const MenuCard = styled(Card)(
-  () => `
+  const theme = useTheme();
+  const MenuCard = styled(Card)(
+    () => `
     max-width: 200px;
     display:flex;
     flex-direction:column;
@@ -75,7 +80,7 @@ const MenuCard = styled(Card)(
     width:100%;    
     }
 `,
-);
+  );
   const onClick = useCallback(() => {
     setSidebar(1);
     bottomRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -102,34 +107,31 @@ const MenuCard = styled(Card)(
         zIndex: 1,
       }}
     >
-        <MenuCard>
+      <MenuCard>
         <CardContent>
-        <Typography variant="h3">
-
-        Triptych Laborare
-        </Typography>
+          <Typography variant="h3">Triptych Laborare</Typography>
         </CardContent>
-          <p style={{fontSize:"1em"}}>{message}</p>
-          <Divider />
-          <CardContent>
-            <Button
-              sx={{ margin: 1 }}
-              variant="contained"
-              color="secondary"
-              onClick={onClick}
-            >
-              Explore
-            </Button>
-            <Button
-              sx={{ margin: 1 }}
-              variant="contained"
-              color="secondary"
-              href="/mint/artifacts"
-            >
-              Mint Artifact
-            </Button>
-          </CardContent>
-        </MenuCard>
+        <p style={{ fontSize: '1em' }}>{message}</p>
+        <Divider />
+        <CardContent>
+          <Button
+            sx={{ margin: 1 }}
+            variant="contained"
+            color="secondary"
+            onClick={onClick}
+          >
+            Explore
+          </Button>
+          <Button
+            sx={{ margin: 1 }}
+            variant="contained"
+            color="secondary"
+            href="/mint/artifacts"
+          >
+            Mint Artifact
+          </Button>
+        </CardContent>
+      </MenuCard>
     </GridItemStyled>
   );
 }
@@ -346,18 +348,16 @@ function Overview() {
                   linear
                   camera={{ position: [0, 100, 300], fov: 90 }}
                 >
-                  <OrbitControls/>
-                  {//@ts-ignore
-                  <Billboard
-  follow={true}
-  lockX={false}
-  lockY={false}
->
-{//@ts-ignore
-<Sphere/>
-}
-</Billboard>
-}
+                  <OrbitControls />
+                  {
+                    //@ts-ignore
+                    <Billboard follow={true} lockX={false} lockY={false}>
+                      {
+                        //@ts-ignore
+                        <Sphere />
+                      }
+                    </Billboard>
+                  }
                   <Logo />
                   <Satellite size={0.5} />
                   <Sun
@@ -372,7 +372,7 @@ function Overview() {
                     setSidebar={setSidebar}
                   />
                   <Swarm count={1100} />
-                  <CameraShake/>
+                  <CameraShake />
                 </Canvas>
               </ParallaxLayer>
               <ParallaxLayer offset={1} speed={0}>
@@ -398,7 +398,7 @@ function Overview() {
                       height={400}
                     />
                   </EffectComposer>
-                  <CameraShake/>
+                  <CameraShake />
                 </Canvas>
               </ParallaxLayer>
               <ParallaxLayer offset={1} speed={0}>

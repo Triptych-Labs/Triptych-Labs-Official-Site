@@ -50,8 +50,7 @@ const Context: FC<{ children: ReactNode }> = ({ children }) => {
   // The network can be set to 'devnet', 'testnet', or 'mainnet-beta'.
 
   // You can also provide a custom RPC endpoint.
-  const endpoint =
-    'https://old-hidden-mountain.solana-testnet.quiknode.pro/8c45affea47fca82045a44c953c2775ac1f871c1/';
+  const endpoint = 'https://psytrbhymqlkfrhudd.dev.genesysgo.net:8899/';
 
   // @solana/wallet-adapter-wallets includes all the adapters but supports tree shaking and lazy loading --
   // Only the wallets you configure here will be compiled into your application, and only the dependencies
