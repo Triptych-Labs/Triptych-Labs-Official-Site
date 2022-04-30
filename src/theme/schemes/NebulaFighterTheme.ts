@@ -126,6 +126,10 @@ const colors = {
 
 export const NebulaFighterTheme = createTheme({
   // direction: i18n.dir(),
+  transitionDuration: () => 4,
+  space: (multiplier) => multiplier * 1,
+  shadowBlur: (multiplier) => multiplier * 1,
+  outline: (multiplier) => multiplier * 1,
   colors: {
     gradients: {
       blue1: colors.gradients.blue1,

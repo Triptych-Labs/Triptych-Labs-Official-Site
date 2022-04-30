@@ -13,7 +13,6 @@ const MainWrapper = styled(Box)(
   ({ theme }) => `
         flex: 1 1 auto;
         display: flex;
-        height: 100%;
 `,
 );
 

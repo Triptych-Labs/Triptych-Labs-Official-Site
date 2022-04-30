@@ -121,6 +121,10 @@ declare module '@mui/material/styles' {
   }
 
   interface ThemeOptions {
+    transitionDuration: any;
+    space: any;
+    shadowBlur: any;
+    outline: any;
     colors: {
       gradients: {
         blue1: string;

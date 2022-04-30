@@ -1,6 +1,8 @@
 import { MintApp } from './MintApp';
 import React, { FC, ReactNode, useState, useEffect } from 'react';
 import { Box } from '@mui/material';
+import { ArwesThemeProvider, StylesBaseline, Text, Figure } from '@arwes/core';
+import TopBarLayout from 'src/layouts/TopbarLayout';
 
 import { styled } from '@mui/material/styles';
 
@@ -13,7 +15,11 @@ const MainContent = styled(Box)(
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color:${theme.colors.alpha.black}
+    background-color:${theme.colors.alpha.black};
+    &:hover: {
+        backgroundColor: rgba(${theme.colors.primary.lighter}, 1),
+        color: 'inherit'
+      };
 `,
 );
 
@@ -61,15 +67,21 @@ function Artifacts() {
   const goWasm = useScript('https://triptychlabs.io:4445/wasm-load.js');
 
   return (
-    <MainContent
-      style={{
-        backgroundImage: 'url(/static/images/1.png)',
-        backgroundPosition: '-20% 15%',
-        backgroundSize: '',
-      }}
-    >
-      {goWasm === 'ready' && <MintApp />}
-    </MainContent>
+    <>
+      <TopBarLayout />
+      <ArwesThemeProvider>
+        <StylesBaseline styles={{ button: { margin: '0 20px 20px 0' } }} />
+        <MainContent
+          style={{
+            backgroundImage: 'url(/static/images/1.png)',
+            backgroundPosition: '-20% 15%',
+            backgroundSize: '',
+          }}
+        >
+          {goWasm === 'ready' && <MintApp />}
+        </MainContent>
+      </ArwesThemeProvider>
+    </>
   );
 }
 

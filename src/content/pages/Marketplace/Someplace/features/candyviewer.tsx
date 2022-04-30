@@ -3,6 +3,10 @@ import base64 from 'base64-js';
 import { base58_to_binary } from 'base58-js';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import FormControl from '@mui/material/FormControl';
+import { AnimatorGeneralProvider, Animator } from '@arwes/animation';
+import { FrameCorners, FrameHexagon, Text, CodeBlock } from '@arwes/core';
+import Typical from 'react-typical';
+import Typist from 'react-typist';
 
 import DateTimePicker from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -62,6 +66,7 @@ import Alert from '@mui/material/Alert';
 const ORACLE = new PublicKey('sAomFigC3JXKq5ArzwbnRQeaYVk9P7Nkin694RrtfKw');
 declare function fetch_candies(T: String): Promise<any>;
 declare function reportCatalog(T: String): Promise<any>;
+declare function reportHashMap(T: String): Promise<any>;
 declare function sellables(Tholder: String, Toracle: String): Promise<any>;
 declare function sellCommit(
   Tholder: String,
@@ -131,7 +136,7 @@ const AsyncImage = (props) => {
     </div>
   );
 };
-const RoadPaper = styled(Paper)(
+const RoadPaper = styled(FrameCorners)(
   ({ theme }) => `
   display:flex;
   justify-content:center;
@@ -204,7 +209,7 @@ export const Candy = ({
   switch (id) {
     case 'List':
       content = (
-        <RoadPaper style={{ paddingTop: '2%' }}>
+        <RoadPaper sx={{ paddingTop: '2%' }}>
           <FormControl fullWidth variant="outlined">
             <Grid container>
               <Grid item>
@@ -278,7 +283,7 @@ export const Candy = ({
         <RoadPaper>
           <Card sx={{ all: 'revert' }}>
             <AsyncImage
-              style={{ height: '200px' }}
+              style={{ height: '300px' }}
               src={
                 candyMeta.hasOwnProperty('image')
                   ? // @ts-ignore
@@ -327,9 +332,9 @@ export const Candies = ({
     value: name,
   }));
   return (
-    <RoadPaper>
-      <Grid>
-        <RoadPaper sx={{ width: 'webkit-fill-available' }}>
+    <Grid container sx={{ height: '500px' }}>
+      <Grid item xs={2}>
+        <RoadPaper sx={{ width: 'webkit-fill-available', height: '500px' }}>
           <Stack>
             <AccordionSummary
               sx={{
@@ -357,27 +362,21 @@ export const Candies = ({
           </Stack>
         </RoadPaper>
       </Grid>
-      <Candy
-        id={id}
-        candyData={candyData}
-        candyId={candyId}
-        onPrimaryAction={onPrimaryAction}
-        setAlertState={setAlertState}
-      />
 
-      <Snackbar
-        open={alertState.open}
-        autoHideDuration={6000}
-        onClose={() => setAlertState({ ...alertState, open: false })}
-      >
-        <Alert
-          onClose={() => setAlertState({ ...alertState, open: false })}
-          severity={alertState.severity}
-        >
-          {alertState.message}
-        </Alert>
-      </Snackbar>
-    </RoadPaper>
+      <Grid xs={10}>
+        <Box>
+          <RoadPaper sx={{ height: '500px' }}>
+            <Candy
+              id={id}
+              candyData={candyData}
+              candyId={candyId}
+              onPrimaryAction={onPrimaryAction}
+              setAlertState={setAlertState}
+            />
+          </RoadPaper>
+        </Box>
+      </Grid>
+    </Grid>
   );
 };
 export const CandiesGalleryListings = ({
@@ -600,10 +599,54 @@ export const CandiesGallery = ({
   }
 
   return (
-    <RoadPaper>
-      <Stack>
-        <Grid container>
-          <RoadPaper sx={{ width: 'webkit-fill-available' }}>
+    <Grid container>
+      <Grid item xs={2}>
+        <RoadPaper sx={{ width: 'webkit-fill-available' }}>
+          <Stack>
+            <AccordionSummary
+              sx={{
+                display: 'flex',
+                textAlign: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Typography variant="h3">{id} Artifacts</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <WheelPicker
+                data={batchData}
+                onChange={onBatchChange}
+                itemHeight={60}
+                activeColor="#aaa"
+                color="#333"
+                backgroundColor={'transparent'}
+                shadowColor={'transparent'}
+                height={200}
+                fontSize={18}
+                selectedID={batch}
+              />
+            </AccordionDetails>
+          </Stack>
+        </RoadPaper>
+      </Grid>
+      <Grid item xs={8}>
+        {filteredCandyData.length > 0 && (
+          <Box>
+            <RoadPaper>
+              <Candy
+                id={id}
+                candyData={filteredCandyData}
+                candyId={candyId}
+                onPrimaryAction={onPrimaryAction}
+                setAlertState={setAlertState}
+              />
+            </RoadPaper>
+          </Box>
+        )}
+      </Grid>
+      <Grid item xs={2}>
+        <RoadPaper>
+          {filteredCandyData.length > 0 && (
             <Stack>
               <AccordionSummary
                 sx={{
@@ -612,12 +655,12 @@ export const CandiesGallery = ({
                   justifyContent: 'center',
                 }}
               >
-                <Typography variant="h3">{id} Artifacts</Typography>
+                <Typography variant="h3">Select</Typography>
               </AccordionSummary>
               <AccordionDetails>
                 <WheelPicker
-                  data={batchData}
-                  onChange={onBatchChange}
+                  data={data}
+                  onChange={onChange}
                   itemHeight={60}
                   activeColor="#aaa"
                   color="#333"
@@ -625,71 +668,14 @@ export const CandiesGallery = ({
                   shadowColor={'transparent'}
                   height={200}
                   fontSize={18}
-                  selectedID={batch}
+                  selectedID={candyId}
                 />
               </AccordionDetails>
             </Stack>
-          </RoadPaper>
-          {filteredCandyData.length > 0 && (
-            <Grid item sx={{ width: 'minContent' }}>
-              <Box>
-                <RoadPaper>
-                  <Candy
-                    id={id}
-                    candyData={filteredCandyData}
-                    candyId={candyId}
-                    onPrimaryAction={onPrimaryAction}
-                    setAlertState={setAlertState}
-                  />
-                </RoadPaper>
-              </Box>
-            </Grid>
           )}
-          <RoadPaper>
-            {filteredCandyData.length > 0 && (
-              <Stack>
-                <AccordionSummary
-                  sx={{
-                    display: 'flex',
-                    textAlign: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <Typography variant="h3">Select</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <WheelPicker
-                    data={data}
-                    onChange={onChange}
-                    itemHeight={60}
-                    activeColor="#aaa"
-                    color="#333"
-                    backgroundColor={'transparent'}
-                    shadowColor={'transparent'}
-                    height={200}
-                    fontSize={18}
-                    selectedID={candyId}
-                  />
-                </AccordionDetails>
-              </Stack>
-            )}
-          </RoadPaper>
-        </Grid>
-      </Stack>
-
-      <Snackbar
-        open={alertState.open}
-        autoHideDuration={6000}
-        onClose={() => setAlertState({ ...alertState, open: false })}
-      >
-        <Alert
-          onClose={() => setAlertState({ ...alertState, open: false })}
-          severity={alertState.severity}
-        >
-          {alertState.message}
-        </Alert>
-      </Snackbar>
-    </RoadPaper>
+        </RoadPaper>
+      </Grid>
+    </Grid>
   );
 };
 
@@ -919,6 +905,75 @@ export const ListableCandiesContainer = () => {
           batch={batch}
           setBatch={setBatch}
         />
+      )}
+    </>
+  );
+};
+
+export const HashMap = () => {
+  const { connection } = useConnection();
+  const wallet = useWallet();
+  const [hashMapData, setHashMapData] = useState({});
+  const [batch, setBatch] = useState('');
+  const [candyId, setCandyId] = useState('');
+
+  const animatorGeneral = { duration: { enter: 300, exit: 300 } };
+
+  const [activate, setActivate] = React.useState(true);
+
+  React.useEffect(() => {
+    const timeout = setTimeout(() => setActivate(!activate), 2000);
+    return () => clearTimeout(timeout);
+  }, [activate]);
+
+  useEffect(() => {
+    async function fetchCandies() {
+      if (reportHashMap === undefined) {
+        return;
+      }
+      const hashMapBytes = await reportHashMap(ORACLE.toString());
+      const hashMap = JSON.parse(String.fromCharCode(...hashMapBytes));
+      console.log(hashMap);
+      setHashMapData(hashMap);
+    }
+    fetchCandies();
+  }, []);
+
+  return (
+    <>
+      {Object.keys(hashMapData).length > 0 && (
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <Grid alignItems="center" container>
+            <Grid xs={5}>
+              <Box textAlign="center">
+                <FrameCorners>hello</FrameCorners>
+              </Box>
+            </Grid>
+            <Grid xs={2}></Grid>
+            <Grid xs={5}>
+              <Box textAlign="center">
+                <FrameCorners>hello</FrameCorners>
+              </Box>
+            </Grid>
+            <Grid xs={12} sx={{ height: '40vh', width: '85vw' }}>
+              <Box textAlign="center">
+                <FrameCorners>
+                  <RoadPaper sx={{ height: '40vh', width: '85vw' }}>
+                    <Box sx={{ whiteSpace: 'preWrap' }} textAlign="left">
+                      <Typist>{JSON.stringify(hashMapData, null, 2)}</Typist>
+                    </Box>
+                  </RoadPaper>
+                </FrameCorners>
+              </Box>
+            </Grid>
+          </Grid>
+        </div>
       )}
     </>
   );

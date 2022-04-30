@@ -1,3 +1,5 @@
+import { AnimatorGeneralProvider, Animator } from '@arwes/animation';
+import { FrameCorners, Button, FrameHexagon, Text } from '@arwes/core';
 import { WalletAdapterNetwork, WalletError } from '@solana/wallet-adapter-base';
 import {
   WalletDialogProvider,
@@ -18,7 +20,15 @@ import {
 } from '@solana/wallet-adapter-wallets';
 import { clusterApiUrl } from '@solana/web3.js';
 import { useSnackbar } from 'notistack';
-import React, { FC, ReactNode, useCallback, useMemo, useState } from 'react';
+import { Grid, styled } from '@mui/material';
+import React, {
+  FC,
+  ReactNode,
+  useCallback,
+  useMemo,
+  useState,
+  useEffect,
+} from 'react';
 import { Theme } from './Theme';
 import { Features } from './Features';
 import Home from './mint/Home';
@@ -29,10 +39,14 @@ import SidebarLayout from 'src/layouts/SidebarLayout';
 import {
   BuyCandiesContainer,
   SellableCandiesContainer,
-  ListableCandiesContainer,
+  HashMap,
 } from './features/candyviewer';
 
 declare function fetch_candies(): Promise<any>;
+
+const StyledButton = styled(Button)`
+  width: 150px;
+`;
 
 export const MintApp: FC = () => {
   const theme = useTheme();
@@ -116,68 +130,185 @@ const Content: FC = () => {
   const txTimeoutInMilliseconds = 30000;
   const [menuOpen, setMenuOpen] = useState(false);
   const endpoint = useMemo(() => clusterApiUrl(network), []);
+
+  const generalAnimator = { duration: { enter: 200, exit: 200 } };
+  const [toggle, setToggle] = useState('view');
+  const [mouse, setMouse] = useState(false);
+  const [activate, setActivate] = useState(true);
+  useEffect(() => {
+    console.log(activate);
+    if (!activate) {
+      const reappear = setTimeout(() => {
+        setActivate(true);
+      }, 625);
+
+      return () => clearTimeout(reappear);
+    }
+  }, [activate, mouse]);
+
+  const enableAnim = useCallback(
+    (event) => {
+      console.log(activate);
+      if (!mouse) {
+        setMouse(true);
+        const reappear = setTimeout(() => {
+          setActivate(false);
+        }, 750);
+
+        return () => clearTimeout(reappear);
+      }
+    },
+    [activate, mouse],
+  );
+  const disableAnim = useCallback(
+    (event) => {
+      console.log(activate);
+      setMouse(false);
+    },
+    [activate],
+  );
+
+  let body;
+  switch (toggle) {
+    case 'buy':
+      body = (
+        <Box>
+          <BuyCandiesContainer />
+        </Box>
+      );
+      break;
+    case 'sell':
+      body = (
+        <Box>
+          <SellableCandiesContainer />
+        </Box>
+      );
+      break;
+    case 'view':
+      body = (
+        <Box>
+          <HashMap />
+        </Box>
+      );
+      break;
+  }
+
+  const toggleView = useCallback(
+    (event) => {
+      setToggle('view');
+    },
+    [setToggle],
+  );
+  const toggleBuy = useCallback(
+    (event) => {
+      setToggle('buy');
+    },
+    [setToggle],
+  );
+  const toggleSell = useCallback(
+    (event) => {
+      setToggle('sell');
+    },
+    [setToggle],
+  );
+
   return (
     <>
-      {menuOpen && <SidebarLayout />}
       <div
         style={{
           width: '100vw',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          marginTop: '100px',
         }}
       >
-        <Menu
-          style={{
-            position: 'absolute',
-            float: 'right',
-            left: '10vw',
-            margin: '0px',
-            fontSize: '50',
-          }}
-          onClick={() => {
-            if (menuOpen === false) {
-              setMenuOpen(true);
-            }
-            if (menuOpen === true) {
-              setMenuOpen(false);
-            }
-          }}
-        />
         <img
           src={'/static/images/labs.png'}
           style={{ width: '40vw', maxWidth: '400px' }}
         />
-        <div className={'feature-spot'}>
-          {
-            //@ts-ignore
-            <Features className={'features'} />
-          }
-        </div>
-        <WalletMultiButton />
-        <div
-          style={{
-            width: 'max-content',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <Box>
-            <BuyCandiesContainer />
-          </Box>
-        </div>
-        <div>
-          <Box>
-            <SellableCandiesContainer />
-          </Box>
-        </div>
-        <div>
-          <Box>
-            <ListableCandiesContainer />
-          </Box>
-        </div>
       </div>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        <Grid alignItems="center" container>
+          <Grid item xs={3}>
+            <Box textAlign="center">
+              <AnimatorGeneralProvider animator={generalAnimator}>
+                <Animator animator={{ activate, manager: 'stagger' }}>
+                  <StyledButton FrameComponent={FrameHexagon}>
+                    <div
+                      onMouseEnter={enableAnim}
+                      onMouseLeave={disableAnim}
+                      onClick={toggleView}
+                    >
+                      <Text style={{ margin: '10px 20px 10px 20px' }}>
+                        View Artifacts
+                      </Text>
+                    </div>
+                  </StyledButton>
+                </Animator>
+              </AnimatorGeneralProvider>
+            </Box>
+          </Grid>
+          <Grid item xs={3}>
+            <Box textAlign="center">
+              <AnimatorGeneralProvider animator={generalAnimator}>
+                <Animator animator={{ activate, manager: 'stagger' }}>
+                  <StyledButton FrameComponent={FrameHexagon}>
+                    <div
+                      onMouseEnter={enableAnim}
+                      onMouseLeave={disableAnim}
+                      onClick={toggleBuy}
+                    >
+                      <Text style={{ margin: '10px 20px 10px 20px' }}>
+                        Buy Artifacts
+                      </Text>
+                    </div>
+                  </StyledButton>
+                </Animator>
+              </AnimatorGeneralProvider>
+            </Box>
+          </Grid>
+          <Grid item xs={3}>
+            <Box textAlign="center">
+              <AnimatorGeneralProvider animator={generalAnimator}>
+                <Animator animator={{ activate, manager: 'stagger' }}>
+                  <StyledButton FrameComponent={FrameHexagon}>
+                    <div
+                      onMouseEnter={enableAnim}
+                      onMouseLeave={disableAnim}
+                      onClick={toggleSell}
+                    >
+                      <Text style={{ margin: '10px 20px 10px 20px' }}>
+                        Sell Artifacts
+                      </Text>
+                    </div>
+                  </StyledButton>
+                </Animator>
+              </AnimatorGeneralProvider>
+            </Box>
+          </Grid>
+          <Grid item xs={3}>
+            <Box textAlign="center">
+              <StyledButton FrameComponent={FrameHexagon}>
+                <div
+                  className="arwes-frame arwes-text"
+                  style={{ margin: '10px 20px 10px 20px' }}
+                >
+                  <div onMouseEnter={enableAnim} onMouseLeave={disableAnim}>
+                    <WalletMultiButton style={{ all: 'unset' }} />
+                  </div>
+                </div>
+              </StyledButton>
+            </Box>
+          </Grid>
+        </Grid>
+      </div>
+      <div>{body}</div>
     </>
   );
 };
