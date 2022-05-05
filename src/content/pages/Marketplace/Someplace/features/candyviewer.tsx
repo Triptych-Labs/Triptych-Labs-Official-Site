@@ -65,6 +65,10 @@ import Alert from '@mui/material/Alert';
 
 const ORACLE = new PublicKey('sAomFigC3JXKq5ArzwbnRQeaYVk9P7Nkin694RrtfKw');
 declare function fetch_candies(T: String): Promise<any>;
+declare function getListings(
+  Toracle: String,
+  TbatchBatchReceipts: String,
+): Promise<any>;
 declare function reportCatalog(T: String): Promise<any>;
 declare function reportHashMap(T: String): Promise<any>;
 declare function sellables(Tholder: String, Toracle: String): Promise<any>;
@@ -695,6 +699,12 @@ export const BuyCandiesContainer = () => {
       const catalogBytes = await reportCatalog(ORACLE.toString());
       const catalog = JSON.parse(String.fromCharCode(...catalogBytes));
       setBatches(catalog);
+      console.log(catalog);
+      const listings = await getListings(
+        ORACLE.toString(),
+        JSON.stringify(catalog),
+      );
+      console.log(JSON.parse(String.fromCharCode(...listings)));
       let data = [];
       for (const batch of catalog) {
         const batchData = JSON.parse(
@@ -704,6 +714,7 @@ export const BuyCandiesContainer = () => {
           batchData.map((_batchData: Object) => ({ ...batch, ..._batchData })),
         );
       }
+      console.log(data);
       setCandyData(data);
     }
     fetchCandies();
