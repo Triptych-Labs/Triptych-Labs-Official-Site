@@ -2,7 +2,7 @@ import { Helmet } from 'react-helmet-async';
 
 import { styled } from '@mui/material/styles';
 import * as THREE from 'three';
-import SidebarLayout from 'src/layouts/SidebarLayout';
+import SidebarLayout from '../../../src/layouts/SidebarLayout';
 import { useState, Suspense, useMemo, useRef, useCallback } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { a, animated } from '@react-spring/three';
@@ -413,3 +413,4 @@ function Overview() {
 }
 
 export default Overview;
+
