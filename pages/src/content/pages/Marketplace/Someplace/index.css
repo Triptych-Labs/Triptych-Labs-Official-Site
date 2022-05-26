@@ -1,0 +1,102 @@
+
+html,
+body {
+  color: #ffffff;
+}
+
+App {
+  display: flex;
+}
+
+.App-header {
+  min-height: 100vh;
+  display: flex;
+  align-items: top;
+  justify-content:top;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.griditem {
+  padding: 20px;
+}
+
+.description {
+  font-size: '5px';
+}
+
+.mint-spot {
+  width:80%;
+  margin: auto;
+  background: rgba(200, 200, 200, 0.9);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content:center;
+}
+
+.cssanimation,
+.cssanimation span {
+  animation-duration: 10s;
+  animation-fill-mode: both;
+}
+
+.cssanimation span {
+  display: inline-block;
+}
+
+.hu__hu__1 {
+  animation: hu__hu__ infinite 10s ease-in-out;
+}
+@keyframes hu__hu__ {
+  50% {
+    transform: translate(4px, -6px);
+  }
+}
+.hu__hu__2 {
+  animation: hu__hu__ infinite 10s ease-in-out;
+}
+@keyframes hu__hu__2 {
+  70% {
+    transform: translate(10%, -60%);
+  }
+}
+.hu__hu__3 {
+  animation: hu__hu__ infinite 10s ease-in-out;
+}
+@keyframes hu__hu__3 {
+  30% {
+    transform: translate(8px, 8px);
+  }
+}
+
+.paper-img {
+  padding: 2vw;
+  height:100%;
+  border-radius:5px;
+  background:rgba(0,0,0,.9);
+  font-size:18px;
+
+
+}
+.feature-spot {
+  width: 70%;
+  border-radius: 8px;
+  padding: 10px;
+  text-align:center;
+  margin: 20px;
+}
+@media only screen and (max-width: 800px) {
+  .feature-spot {
+    width:98%;
+  }
+}
+
+.MuiCard-root {
+  font-family: 'arial';
+}
+
+.Mint-Home {
+  margin-bottom: 20px;
+}
