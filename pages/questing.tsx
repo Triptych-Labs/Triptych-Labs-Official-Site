@@ -7,6 +7,7 @@ import { SidebarProvider } from './src/contexts/SidebarContext';
 import { RecoilRoot } from 'recoil';
 import SuspenseLoader from './src/components/SuspenseLoader';
 import { Suspense, lazy } from 'react';
+import Questing from './src/content/pages/Questing';
 
 const Loader = (Component) => (props) =>
   (
@@ -14,8 +15,6 @@ const Loader = (Component) => (props) =>
       <Component {...props} />
     </Suspense>
   );
-
-const Questing = Loader(lazy(() => import('./src/content/pages/Questing')));
 
 const Home = () => {
   return (
@@ -35,3 +34,4 @@ const Home = () => {
 };
 
 export default Home;
+

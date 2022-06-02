@@ -35,7 +35,7 @@ import Home from './mint/Home';
 import * as anc from '@project-serum/anchor';
 import { useTheme, Box } from '@mui/material';
 import Menu from '@mui/icons-material/Menu';
-import { QuestsGallery, HashMap } from './questing/candyviewer';
+import { QuestsGallery, Rewards } from './questing/candyviewer';
 
 declare function fetch_candies(): Promise<any>;
 
@@ -127,7 +127,7 @@ const Content: FC = () => {
   const endpoint = useMemo(() => clusterApiUrl(network), []);
 
   const generalAnimator = { duration: { enter: 200, exit: 200 } };
-  const [toggle, setToggle] = useState('buy');
+  const [toggle, setToggle] = useState('start');
   const [mouse, setMouse] = useState(false);
   const [activate, setActivate] = useState(true);
   useEffect(() => {
@@ -165,19 +165,17 @@ const Content: FC = () => {
 
   let body;
   switch (toggle) {
-    case 'buy':
+    case 'start':
       body = (
         <Box>
           <QuestsGallery />
         </Box>
       );
       break;
-    case 'sell':
-      break;
-    case 'view':
+    case 'claim':
       body = (
         <Box>
-          <HashMap />
+          <Rewards />
         </Box>
       );
       break;
@@ -185,19 +183,13 @@ const Content: FC = () => {
 
   const toggleView = useCallback(
     (event) => {
-      setToggle('view');
+      setToggle('start');
     },
     [setToggle],
   );
   const toggleBuy = useCallback(
     (event) => {
-      setToggle('buy');
-    },
-    [setToggle],
-  );
-  const toggleSell = useCallback(
-    (event) => {
-      setToggle('sell');
+      setToggle('claim');
     },
     [setToggle],
   );
@@ -225,7 +217,7 @@ const Content: FC = () => {
         }}
       >
         <Grid alignItems="center" container>
-          <Grid item xs={3}>
+          <Grid item xs={4}>
             <Box textAlign="center">
               <AnimatorGeneralProvider animator={generalAnimator}>
                 <Animator animator={{ activate, manager: 'stagger' }}>
@@ -236,7 +228,7 @@ const Content: FC = () => {
                       onClick={toggleView}
                     >
                       <Text style={{ margin: '10px 20px 10px 20px' }}>
-                        View Artifacts
+                        Start Quests
                       </Text>
                     </div>
                   </StyledButton>
@@ -244,7 +236,7 @@ const Content: FC = () => {
               </AnimatorGeneralProvider>
             </Box>
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={4}>
             <Box textAlign="center">
               <AnimatorGeneralProvider animator={generalAnimator}>
                 <Animator animator={{ activate, manager: 'stagger' }}>
@@ -255,7 +247,7 @@ const Content: FC = () => {
                       onClick={toggleBuy}
                     >
                       <Text style={{ margin: '10px 20px 10px 20px' }}>
-                        Buy Artifacts
+                        Claim Rewards
                       </Text>
                     </div>
                   </StyledButton>
@@ -263,26 +255,7 @@ const Content: FC = () => {
               </AnimatorGeneralProvider>
             </Box>
           </Grid>
-          <Grid item xs={3}>
-            <Box textAlign="center">
-              <AnimatorGeneralProvider animator={generalAnimator}>
-                <Animator animator={{ activate, manager: 'stagger' }}>
-                  <StyledButton FrameComponent={FrameHexagon}>
-                    <div
-                      onMouseEnter={enableAnim}
-                      onMouseLeave={disableAnim}
-                      onClick={toggleSell}
-                    >
-                      <Text style={{ margin: '10px 20px 10px 20px' }}>
-                        Sell Artifacts
-                      </Text>
-                    </div>
-                  </StyledButton>
-                </Animator>
-              </AnimatorGeneralProvider>
-            </Box>
-          </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={4}>
             <Box textAlign="center">
               <StyledButton FrameComponent={FrameHexagon}>
                 <div
@@ -302,4 +275,3 @@ const Content: FC = () => {
     </>
   );
 };
-

@@ -22,7 +22,46 @@ const MainContent = styled(Box)(
 `,
 );
 
-function useScript(src) {
+function useSomeplaceWasm(src) {
+  // Keep track of script status ("idle", "loading", "ready", "error")
+  const [status, setStatus] = useState(src ? 'loading' : 'idle');
+  useEffect(
+    () => {
+      if (!WebAssembly.instantiateStreaming) {
+        // polyfill
+        // @ts-ignore
+        WebAssembly.instantiateStreaming = async (resp, importObject) => {
+          return await WebAssembly.instantiate(resp, importObject);
+        };
+      }
+      // @ts-ignore
+      const go = new Go();
+      // @ts-ignore
+      let mod, inst;
+      async function goInit() {
+        try {
+          const bytes = await fetch('/someplace.wasm');
+          const result = await WebAssembly.instantiateStreaming(
+            bytes,
+            go.importObject,
+          );
+          mod = result.module;
+          inst = result.instance;
+          go.run(inst);
+          setStatus('ready');
+        } catch (err) {
+          console.error(err);
+          setStatus('error');
+        }
+      }
+
+      goInit();
+    },
+    [src], // Only re-run effect if script src changes
+  );
+  return status;
+}
+function useQuestingWasm(src) {
   // Keep track of script status ("idle", "loading", "ready", "error")
   const [status, setStatus] = useState(src ? 'loading' : 'idle');
   useEffect(
@@ -63,7 +102,10 @@ function useScript(src) {
 }
 
 function Questing() {
-  const goWasm = useScript('https://triptychlabs.io:4445/wasm-load.js');
+  const questing = useQuestingWasm('https://triptychlabs.io:4445/wasm-load.js');
+  const storefront = useSomeplaceWasm(
+    'https://triptychlabs.io:4445/wasm-load.js',
+  );
 
   return (
     <>
@@ -76,7 +118,7 @@ function Questing() {
             backgroundSize: '',
           }}
         >
-          {goWasm === 'ready' && <MintApp />}
+          {questing === 'ready' && questing === storefront && <MintApp />}
         </MainContent>
       </ArwesThemeProvider>
     </>
