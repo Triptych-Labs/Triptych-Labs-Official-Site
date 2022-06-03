@@ -10,6 +10,7 @@ import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { EffectComposer, DepthOfField } from '@react-three/postprocessing';
 import { useLoader } from '@react-three/fiber';
+import Link from 'next/link';
 // import randomColor from 'randomcolor';
 // import CameraControls from 'camera-controls';
 import planetData from './planets';
@@ -122,9 +123,11 @@ function Dialog({ dialogue, setSidebar, bottomRef }) {
           >
             Explore
           </Button>
-          <Button sx={{ margin: 1 }} variant="contained" color="secondary">
-            Mint Artifact
-          </Button>
+          <Link href={'/mint/artifacts'}>
+            <Button sx={{ margin: 1 }} variant="contained" color="secondary">
+              Mint Artifact
+            </Button>
+          </Link>
         </CardContent>
       </MenuCard>
     </GridItemStyled>
