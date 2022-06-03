@@ -202,23 +202,13 @@ export const Features = () => {
             >
               <Grid item xs={12}></Grid>
               <Grid item xs={12} xl={4} style={{ width: '100%' }}>
-                <Paper className={'paper-img'}>
-                  <NavLink to="/github/steakhouse">
-                    SteakHouse: Staking Contract + L2
-                  </NavLink>
-                </Paper>
+                <Paper className={'paper-img'}></Paper>
               </Grid>
               <Grid item xs={12} xl={4}>
-                <Paper className={'paper-img'}>
-                  <NavLink to="/github/nftloyalty">NFT Loyalty Rewards</NavLink>
-                </Paper>
+                <Paper className={'paper-img'}></Paper>
               </Grid>
               <Grid item xs={12} xl={4}>
-                <Paper className={'paper-img'}>
-                  <NavLink to="/github/cardpacks">
-                    Card Pack like Metadata Preperation for Candy Machine
-                  </NavLink>
-                </Paper>
+                <Paper className={'paper-img'}></Paper>
               </Grid>
             </Grid>
           </Typography>
@@ -229,3 +219,4 @@ export const Features = () => {
 };
 
 export default Features;
+

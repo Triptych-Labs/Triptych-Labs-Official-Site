@@ -89,7 +89,7 @@ const Content: FC = () => {
   const getCandyMachineId = (): anc.web3.PublicKey | undefined => {
     try {
       const candyMachineId = new anc.web3.PublicKey(
-        'HqXytATekHv4ePK6GDoFnxYQWhKCzfhL2n2pqAmBwTaA',
+        'AKQJEFQ6SeTWNMRPhg716rLTWQ33ECGPdhLGwzqsZKN3',
       );
 
       return candyMachineId;
@@ -99,10 +99,10 @@ const Content: FC = () => {
     }
   };
   const candyMachineId = getCandyMachineId();
-  const network = 'devnet';
-  const rpcHost = 'https://api.devnet.solana.com/';
+  const network = 'mainnet-beta';
+  const rpcHost = 'https://ssc-dao.genesysgo.net/';
   const connection = new anc.web3.Connection(
-    rpcHost ? rpcHost : anc.web3.clusterApiUrl('devnet'),
+    rpcHost ? rpcHost : anc.web3.clusterApiUrl('mainnet-beta'),
   );
 
   const onClick = async () => {
@@ -151,6 +151,7 @@ const Content: FC = () => {
         <div
           className={'mint-spot'}
           style={{
+            minWidth: '80vw',
             maxWidth: '700px',
             margin: '30px',
             background: "url('/static/images/39.jpg')",
@@ -178,3 +179,4 @@ const Content: FC = () => {
     </>
   );
 };
+

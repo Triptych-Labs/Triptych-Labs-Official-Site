@@ -1,8 +1,7 @@
 import { Box, Hidden, Tooltip } from '@mui/material';
-import { Link } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 
-const LogoWrapper = styled(Link)(
+const LogoWrapper = styled(Box)(
   ({ theme }) => `
         color: ${theme.palette.text.primary};
         padding: ${theme.spacing(0, 1, 0, 0)};
@@ -73,7 +72,7 @@ const LogoText = styled(Box)(
 // <LogoSignInner />
 function Logo() {
   return (
-    <LogoWrapper to="/overview">
+    <LogoWrapper>
       <LogoSignWrapper>
         <LogoSign>
           <img src="/static/images/labs.png" />
@@ -84,3 +83,4 @@ function Logo() {
 }
 
 export default Logo;
+

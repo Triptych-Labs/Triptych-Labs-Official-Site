@@ -5,6 +5,7 @@ import { SidebarContext } from '../../../../../src/contexts/SidebarContext';
 
 import PropTypes from 'prop-types';
 import { Button, Badge, Collapse, ListItem } from '@mui/material';
+import Link from 'next/link';
 
 import ExpandLessTwoToneIcon from '@mui/icons-material/ExpandLessTwoTone';
 import ExpandMoreTwoToneIcon from '@mui/icons-material/ExpandMoreTwoTone';
@@ -42,33 +43,30 @@ const SidebarMenuItem: FC<SidebarMenuItemProps> = ({
   if (children) {
     return (
       <ListItem component="div" className="Mui-children" key={name} {...rest}>
-        <Button
-          className={clsx({ 'Mui-active': menuToggle })}
-          startIcon={Icon && <Icon />}
-          endIcon={
-            menuToggle ? <ExpandLessTwoToneIcon /> : <ExpandMoreTwoToneIcon />
-          }
-          onClick={toggleMenu}
-        >
-          {name}
-        </Button>
+        {name}
         <Collapse in={menuToggle}>{children}</Collapse>
       </ListItem>
     );
   }
 
+  let uri = '';
+  let passHref = false;
+  if (link) {
+    uri = link;
+  }
+  if (href) {
+    uri = href;
+    passHref = true;
+  }
+  console.log(name, uri, link, href, passHref);
   return (
     <ListItem component="div" key={name} {...rest}>
-      <Button
-        activeClassName="Mui-active"
-        component={RouterLink}
-        onClick={toggleSidebar}
-        to={link}
-        startIcon={Icon && <Icon />}
-      >
-        {name}
-        {badge && <Badge badgeContent={badge} />}
-      </Button>
+      <Link href={uri} passHref={passHref}>
+        <Button onClick={toggleSidebar} startIcon={Icon && <Icon />}>
+          {name}
+          {badge && <Badge badgeContent={badge} />}
+        </Button>
+      </Link>
     </ListItem>
   );
 };
@@ -90,4 +88,3 @@ SidebarMenuItem.defaultProps = {
 };
 
 export default SidebarMenuItem;
-

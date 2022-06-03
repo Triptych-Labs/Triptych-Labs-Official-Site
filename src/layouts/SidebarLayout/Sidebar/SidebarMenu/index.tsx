@@ -176,6 +176,7 @@ const reduceChildRoutes = ({
         name={item.name}
         icon={item.icon}
         link={item.link}
+        href={item.href}
         badge={item.badge}
       >
         {renderSidebarMenuItems({
@@ -191,6 +192,7 @@ const reduceChildRoutes = ({
         active={exactMatch}
         name={item.name}
         link={item.link}
+        href={item.href}
         badge={item.badge}
         icon={item.icon}
       />,
@@ -201,8 +203,6 @@ const reduceChildRoutes = ({
 };
 
 function SidebarMenu() {
-  const location = useLocation();
-
   return (
     <>
       {menuItems.map((section) => (
@@ -216,7 +216,7 @@ function SidebarMenu() {
         >
           {renderSidebarMenuItems({
             items: section.items,
-            path: location.pathname,
+            path: '',
           })}
         </MenuWrapper>
       ))}

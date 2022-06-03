@@ -24,9 +24,6 @@ import { useSpring, config } from 'react-spring';
 // We take the "a" element from /three here because we want to animate threejs objects
 import { a, animated } from '@react-spring/three';
 
-const texture = new THREE.TextureLoader().load(
-  '/static/images/textures/jupiter.jpg',
-);
 export function Sun({
   inst,
   size,
@@ -74,6 +71,9 @@ export function Sun({
   const color = x.to([0, 1], ['#FF9833', '#FFA54D']);
 
   // ?planetRef.current.rotation.x -= 0.1;
+  const texture = new THREE.TextureLoader().load(
+    '/static/images/textures/jupiter.jpg',
+  );
 
   return (
     <group scale={[1.25, 1.25, 1.25]} dispose={null} position={[0, 0, 0]}>
@@ -102,3 +102,4 @@ export function Sun({
     </group>
   );
 }
+

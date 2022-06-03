@@ -1,14 +1,13 @@
 import { HelmetProvider } from 'react-helmet-async';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-
-import ThemeProvider from '../src/theme/ThemeProvider';
+import ThemeProvider from '../../src/theme/ThemeProvider';
 import { CssBaseline } from '@mui/material';
-import { SidebarProvider } from '../src/contexts/SidebarContext';
+import { SidebarProvider } from '../../src/contexts/SidebarContext';
 import { RecoilRoot } from 'recoil';
-import SuspenseLoader from '../src/components/SuspenseLoader';
+import SuspenseLoader from '../../src/components/SuspenseLoader';
 import { Suspense, lazy } from 'react';
-import Overview from '../src/content/overview';
+import Artifacts from '../../src/content/pages/Mint/Artifacts';
 
 const Loader = (Component) => (props) =>
   (
@@ -25,7 +24,7 @@ const Home = () => {
           <ThemeProvider>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <CssBaseline />
-              <Overview />
+              <Artifacts />
             </LocalizationProvider>
           </ThemeProvider>
         </RecoilRoot>

@@ -122,12 +122,7 @@ function Dialog({ dialogue, setSidebar, bottomRef }) {
           >
             Explore
           </Button>
-          <Button
-            sx={{ margin: 1 }}
-            variant="contained"
-            color="secondary"
-            href="/mint/artifacts"
-          >
+          <Button sx={{ margin: 1 }} variant="contained" color="secondary">
             Mint Artifact
           </Button>
         </CardContent>

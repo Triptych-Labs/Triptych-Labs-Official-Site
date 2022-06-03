@@ -9,8 +9,6 @@ import {
   Container,
   useTheme,
 } from '@mui/material';
-import { NavLink } from 'react-router-dom';
-// import './index.css';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -25,7 +23,7 @@ import WheelPicker from 'react-simple-wheel-picker';
 import { atom, useRecoilState } from 'recoil';
 import axios from 'axios';
 
-declare function fetch_candies(T: string): Promise<any>;
+// declare function fetch_candies(T: string): Promise<any>;
 const candyCache = atom({
   key: 'CandyCache',
   default: {},
@@ -157,6 +155,7 @@ export const Candies = ({ candyData }) => {
 export const CandiesContainer = () => {
   const [candyData, setCandyData] = useState([]);
 
+  /*
   useEffect(() => {
     async function fetchCandies() {
       const data = await fetch_candies(
@@ -166,6 +165,8 @@ export const CandiesContainer = () => {
     }
     fetchCandies();
   }, []);
+  */
 
   return <>{candyData.length > 0 && <Candies candyData={candyData} />}</>;
 };
+

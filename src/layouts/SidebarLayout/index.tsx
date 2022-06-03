@@ -4,7 +4,6 @@ import { Box } from '@mui/material';
 import { Outlet } from 'react-router-dom';
 
 import Sidebar from './Sidebar';
-import Header from './Header';
 
 interface SidebarLayoutProps {
   children?: ReactNode;
@@ -34,11 +33,6 @@ const SidebarLayout: FC<SidebarLayoutProps> = ({}) => {
   return (
     <div>
       <Sidebar />
-      <MainWrapper>
-        <MainContent>
-          <Outlet />
-        </MainContent>
-      </MainWrapper>
     </div>
   );
 };
